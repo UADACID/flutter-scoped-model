@@ -15,4 +15,9 @@ mixin TodoListModel on Model {
     _todoItems.clear();
     notifyListeners();
   }
+
+  void removeItem(index) {
+    _todoItems.removeAt(index);
+    notifyListeners();
+  }
 }

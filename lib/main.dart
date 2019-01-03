@@ -80,9 +80,20 @@ class Todos extends StatelessWidget {
                       return Card(
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            model.todosItems[index],
-                            style: TextStyle(color: Colors.black),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                model.todosItems[index],
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  model.removeItem(index);
+                                },
+                                child: Icon(Icons.delete),
+                              )
+                            ],
                           ),
                         ),
                       );
