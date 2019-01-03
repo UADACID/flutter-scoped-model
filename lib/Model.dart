@@ -7,7 +7,6 @@ class CounterModel extends Model {
 
   increment() async {
     _counter++;
-    await Future.delayed(const Duration(seconds: 1));
     notifyListeners();
   }
 }
@@ -24,22 +23,9 @@ class TextModel extends Model {
 }
 
 class TodoListModel extends Model {
-  int _number = 2;
-  List<String> _todoItems = [
-    '2222',
-    '3242432',
-    '2222',
-    '3242432',
-    '2222',
-    '3242432',
-    '2222',
-    '3242432',
-    'sssssddddddddd'
-  ];
+  List<String> _todoItems = [];
 
   List<String> get todosItems => _todoItems;
-
-  int get number => _number;
 
   int getTodoListCount() {
     return _todoItems.length;
@@ -48,13 +34,12 @@ class TodoListModel extends Model {
   void addTodoItem() {
     int index = _todoItems.length;
     _todoItems.add('Item $index');
-    _number++;
     // print(_todoItems);
     notifyListeners();
   }
 
-  void addNumber() {
-    _number++;
+  void clearTodoItems() {
+    _todoItems.clear();
     notifyListeners();
   }
 }

@@ -8,23 +8,26 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<TodoListModel>(
-      model: TodoListModel(),
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.blue,
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // Notice that the counter didn't reset back to zero; the application
+        // is not restarted.
+        primarySwatch: Colors.blue,
+      ),
+      home: ScopedModel<TodoListModel>(
+        model: TodoListModel(),
+        child: ScopedModel<CounterModel>(
+          model: CounterModel(),
+          child: MyHomePage(title: 'Belajar Scoped Model'),
         ),
-        home: MyHomePage(title: 'Belajar Scoped Model'),
       ),
     );
   }
@@ -41,39 +44,25 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: Stack(
-        children: <Widget>[
-          Todos(),
-          // TextMe()
-        ],
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Todos(),
+            ),
+            Expanded(child: Counter())
+          ],
+        ),
       ),
-      floatingActionButton: ScopedModelDescendant<TodoListModel>(
+      floatingActionButton: ScopedModelDescendant<CounterModel>(
         builder: (context, child, model) => FloatingActionButton(
               onPressed: () {
-                model.addTodoItem();
+                model.increment();
               },
-              child: Text(model.number.toString()),
+              child: Icon(Icons.add),
             ),
       ),
     );
-  }
-}
-
-class TextMe extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ScopedModel<TodoListModel>(
-        model: TodoListModel(),
-        child: ScopedModelDescendant<TodoListModel>(
-          builder: (context, child, model) => Container(
-                color: Colors.red,
-                child: TextField(
-                  onSubmitted: (String value) {
-                    // model.addTodoItem(value);
-                  },
-                ),
-              ),
-        ));
   }
 }
 
@@ -81,19 +70,83 @@ class Todos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<TodoListModel>(
-      builder: (context, child, model) => Column(
-            children: <Widget>[
-              Text('----------------------- ${model.number.toString()}'),
-              Expanded(
-                // height: 500,
-                child: ListView.builder(
-                  itemCount: model.getTodoListCount(),
-                  itemBuilder: (context, index) {
-                    return Text(model.todosItems[index]);
-                  },
+      builder: (context, child, model) => Container(
+            padding: const EdgeInsets.all(20.0),
+            color: Colors.blue,
+            child: Column(
+              children: <Widget>[
+                Text('Todos Model',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+                Expanded(
+                  flex: 9,
+                  child: ListView.builder(
+                    itemCount: model.todosItems.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      if (model.todosItems.length == 0) {
+                        return Text(
+                          'Tidak Ada Data',
+                          style: TextStyle(color: Colors.white),
+                        );
+                      }
+
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            model.todosItems[index],
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              )
-            ],
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      RaisedButton(
+                        onPressed: () {
+                          model.addTodoItem();
+                        },
+                        child: Text('Tambah Data'),
+                      ),
+                      model.todosItems.length == 0
+                          ? Text('')
+                          : RaisedButton(
+                              onPressed: () {
+                                model.clearTodoItems();
+                              },
+                              child: Text('Bersihkan Data'),
+                            )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+    );
+  }
+}
+
+class Counter extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ScopedModelDescendant<CounterModel>(
+      builder: (context, child, model) => Container(
+            width: MediaQuery.of(context).size.width,
+            color: Colors.white,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Counter Model',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text('Anda sudah menekan sebanyak ${model.counter} kali'),
+              ],
+            ),
           ),
     );
   }
