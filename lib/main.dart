@@ -8,8 +8,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<CounterModel>(
-      model: CounterModel(),
+    return ScopedModel<TodoListModel>(
+      model: TodoListModel(),
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  String title;
+  final String title;
 
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -41,23 +41,18 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
         children: <Widget>[
-          Container(
-            alignment: Alignment(0.0, 0.0),
-            child: ScopedModelDescendant<CounterModel>(
-              builder: (context, child, model) =>
-                  Text('Anda sudah menekan sebanyak ${model.counter} kali'),
-            ),
-          ),
-          TextMe()
+          Todos(),
+          // TextMe()
         ],
       ),
-      floatingActionButton: ScopedModelDescendant<CounterModel>(
+      floatingActionButton: ScopedModelDescendant<TodoListModel>(
         builder: (context, child, model) => FloatingActionButton(
-              onPressed: model.increment,
-              child: Icon(Icons.add),
+              onPressed: () {
+                model.addTodoItem();
+              },
+              child: Text(model.number.toString()),
             ),
       ),
     );
@@ -67,18 +62,40 @@ class MyHomePage extends StatelessWidget {
 class TextMe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<TextModel>(
-        model: TextModel(),
-        child: ScopedModelDescendant<TextModel>(
-          builder: (context, child, model) => Column(
-                children: <Widget>[
-                  Text(model.text),
-                  TextField(
-                    onChanged: model.setText,
-                  )
-                ],
+    return ScopedModel<TodoListModel>(
+        model: TodoListModel(),
+        child: ScopedModelDescendant<TodoListModel>(
+          builder: (context, child, model) => Container(
+                color: Colors.red,
+                child: TextField(
+                  onSubmitted: (String value) {
+                    // model.addTodoItem(value);
+                  },
+                ),
               ),
         ));
+  }
+}
+
+class Todos extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ScopedModelDescendant<TodoListModel>(
+      builder: (context, child, model) => Column(
+            children: <Widget>[
+              Text('----------------------- ${model.number.toString()}'),
+              Expanded(
+                // height: 500,
+                child: ListView.builder(
+                  itemCount: model.getTodoListCount(),
+                  itemBuilder: (context, index) {
+                    return Text(model.todosItems[index]);
+                  },
+                ),
+              )
+            ],
+          ),
+    );
   }
 }
 
