@@ -22,12 +22,9 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: ScopedModel<TodoListModel>(
-        model: TodoListModel(),
-        child: ScopedModel<CounterModel>(
-          model: CounterModel(),
-          child: MyHomePage(title: 'Belajar Scoped Model'),
-        ),
+      home: ScopedModel<AppModel>(
+        model: AppModel(),
+        child: MyHomePage(title: 'Belajar Scoped Model'),
       ),
     );
   }
@@ -54,7 +51,7 @@ class MyHomePage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: ScopedModelDescendant<CounterModel>(
+      floatingActionButton: ScopedModelDescendant<AppModel>(
         builder: (context, child, model) => FloatingActionButton(
               onPressed: () {
                 model.increment();
@@ -69,7 +66,7 @@ class MyHomePage extends StatelessWidget {
 class Todos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<TodoListModel>(
+    return ScopedModelDescendant<AppModel>(
       builder: (context, child, model) => Container(
             padding: const EdgeInsets.all(20.0),
             color: Colors.blue,
@@ -133,7 +130,7 @@ class Todos extends StatelessWidget {
 class Counter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<CounterModel>(
+    return ScopedModelDescendant<AppModel>(
       builder: (context, child, model) => Container(
             width: MediaQuery.of(context).size.width,
             color: Colors.white,

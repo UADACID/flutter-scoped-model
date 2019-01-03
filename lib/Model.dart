@@ -1,6 +1,6 @@
 import 'package:scoped_model/scoped_model.dart';
 
-class CounterModel extends Model {
+mixin CounterModel on Model {
   int _counter = 0;
 
   int get counter => _counter;
@@ -22,7 +22,7 @@ class TextModel extends Model {
   }
 }
 
-class TodoListModel extends Model {
+mixin TodoListModel on Model {
   List<String> _todoItems = [];
 
   List<String> get todosItems => _todoItems;
@@ -43,3 +43,5 @@ class TodoListModel extends Model {
     notifyListeners();
   }
 }
+
+class AppModel extends Model with CounterModel, TodoListModel {}
