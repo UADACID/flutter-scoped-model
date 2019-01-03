@@ -11,17 +11,6 @@ mixin CounterModel on Model {
   }
 }
 
-class TextModel extends Model {
-  String _text = 'a';
-
-  String get text => _text;
-
-  void setText(value) {
-    _text = value;
-    notifyListeners();
-  }
-}
-
 mixin TodoListModel on Model {
   List<String> _todoItems = [];
 
@@ -34,7 +23,6 @@ mixin TodoListModel on Model {
   void addTodoItem() {
     int index = _todoItems.length;
     _todoItems.add('Item $index');
-    // print(_todoItems);
     notifyListeners();
   }
 
