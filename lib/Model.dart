@@ -16,10 +16,6 @@ mixin TodoListModel on Model {
 
   List<String> get todosItems => _todoItems;
 
-  int getTodoListCount() {
-    return _todoItems.length;
-  }
-
   void addTodoItem() {
     int index = _todoItems.length;
     _todoItems.add('Item $index');
