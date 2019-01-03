@@ -100,24 +100,29 @@ class Todos extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      RaisedButton(
-                        onPressed: () {
-                          model.addTodoItem();
-                        },
-                        child: Text('Tambah Data'),
-                      ),
-                      model.todosItems.length == 0
-                          ? Text('')
-                          : RaisedButton(
-                              onPressed: () {
-                                model.clearTodoItems();
-                              },
-                              child: Text('Bersihkan Data'),
-                            )
-                    ],
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        RaisedButton(
+                          color: Colors.black,
+                          onPressed: () {
+                            model.addTodoItem();
+                          },
+                          child: Text('Tambah Data',
+                              style: TextStyle(color: Colors.white)),
+                        ),
+                        model.todosItems.length == 0
+                            ? Text('')
+                            : RaisedButton(
+                                onPressed: () {
+                                  model.clearTodoItems();
+                                },
+                                child: Text('Bersihkan Data'),
+                              )
+                      ],
+                    ),
                   ),
                 )
               ],
